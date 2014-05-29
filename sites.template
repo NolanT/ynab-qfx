@@ -1,0 +1,210 @@
+# SITES.DAT
+# http://sites.google.com/site/pocketsense/
+# Common configuration data for the ofx Python script pkg.
+# Ver 1: rlc: Feb-2010
+
+# Note: Use Setup.py to configure account information (account numbers, user names, passwords, etc.)
+
+# ******************************************************************************
+# Revisions
+# ---------
+# 01Mar2010*rlc:  -Modifed to add additional fields (appid, appver, and brokerid)
+# 11Mar2010*rlc:  -Added SaveStocksFirst option.
+# 18Mar2010*rlc:  -Slight edits
+# 19Sep2010*rlc:  -Added YahooURL (alternate site) and SaveQuoteHistory
+# 04Jan2010*rlc:  -Added ShowQuoteHTM and AskQuoteHTM options
+# 18Feb2011*rlc:  -Added EnableYahooScrape option
+#                 -Added timeOffset option for site entries
+#                 -Added QuoteTimeZone option for Yahoo server
+#                 -Added QuoteCurrency: USD for Yahoo quotes
+#                 -Added quote multiplier option (m:)
+# 22Feb2011*rlc:  -Added alternate ticker symbol option (s:) for funds/stocks
+# 28Aug2012*rlc:  -Added support for OFX version 103 (for sites that require ClientUID)
+#                  Default Version = 102
+#                 -Added promptInterval option (default=No)
+#                 -Added CombineOFX option (combine ofx files before sending to Money)
+#                 -Added quietScrub option.  Default = No
+# 28Aug2013*rlc:  -Added forceQuotes option for non-US versions of Money
+# 20Oct2013*rlc:  -Added QuoteAccount option to allow custom account number
+# 20Jan2014*rlc:  -Added EnableGoogleFinance option
+#                 -Added EnableYahooFinance option
+# ******************************************************************************
+
+
+#Entries are (FieldName : Value) pairs, one per line.  Spacing/Tabs are ignored.
+#anything following a "#" symbol is ignored (treated as a comment)
+
+#define default download interval (days)
+#--------------------------------------------------------------------------------
+defaultInterval: 7
+
+#prompt user for alternate download interval?
+#--------------------------------------------------------------------------------
+promptInterval: No
+
+#Combine ofx files before sending to Money
+#Warning: Do not enable this option until you have tested all account settings, and
+#         have verified that data is loading correctly to Money accounts.
+#--------------------------------------------------------------------------------
+CombineOFX: No
+
+#Send stock/fund quotes to Money first?  Default = No
+#--------------------------------------------------------------------------------
+SaveTickersFirst: No
+
+#Save quote history to QuoteHistory.csv?  Default = No
+#--------------------------------------------------------------------------------
+SaveQuoteHistory: No
+
+#Suppress scrubber messages (default=No)
+#--------------------------------------------------------------------------------
+quietScrub: No
+
+#--------------------------------------------------------------------------------
+#SITE LIST (example for each type)
+
+#Be sure to match CaSe for site info as given by ofxhome.com (especially the url)
+
+#   Go to http://www.ofxhome.com/index.php/home/directory 
+#   to get data for your institutions
+
+# Available field names and descriptions
+# Field names must match the pre-defined names, but they are NOT case sensitive.
+# Note that most sites only use some of the fields, but three are required for all.
+#--------------------------------------------------------------------------------
+#   SiteName        Unique name for site entry                  (**REQUIRED**)
+#   AcctType        Account type (CCSTMT, INVSTMT, or BASTMT)*  (**REQUIRED**)
+#   fiorg           Organization ID
+#   url             Web address (case sensitive!)               (**REQUIRED**)
+#   fid             Financial institution ID
+#   bankID          Bank ID
+#   brokerID        Broker ID
+#   ofxVer          OFX version.  Valid values are 102 and 103.  Default=102
+#   appID           Alternate Application ID (default defined in control2.py)
+#   appVer          Alternate Application Version (default defined in control2.py)
+#   minInterval     Mininum number of days to download (overrides defaultInterval if needed)
+#   timeOffset      Add (-subtract) number of hours to statement DTASOF field(s).  Default = zero.
+
+#   * Valid AcctType entries:  
+#       CCSTMT = Credit card
+#       INVSTMT= Investment
+#       BASTMT = Bank (checking/savings)
+#--------------------------------------------------------------------------------   
+
+#empty site template (copy/paste and fill in)
+#--------------------------------------------------------------------------------
+<site>
+    SiteName   : 
+    AcctType   : 
+    fiorg      : 
+    fid        : 
+    url        : 
+    bankid     : 
+    brokerid   :
+    ofxVer     :
+    appid      : 
+    appver     : 
+    mininterval:
+    timeOffset :
+</site>
+
+#SITE ENTRIES
+#--------------------------------------------------------------------------------             
+<site>
+    SiteName   : DISCOVER
+    AcctType   : CCSTMT     #credit card
+    fiorg      : Discover Financial Services
+    fid        : 7101
+    url        : https://ofx.discovercard.com
+    bankid     :
+    brokerid   :
+    appid      :
+    appver     :
+    mininterval:
+    timeOffset :
+</site>
+
+<site>
+    SiteName   : VANGUARD
+    AcctType   : INVSTMT    #investment
+    fiorg      : Vanguard
+    fid        :
+    url        : https://vesnc.vanguard.com/us/OfxDirectConnectServlet
+    bankid     :
+    brokerid   : vanguard.com
+    appid      :
+    appver     :
+    mininterval: 30     #Vanguard doesn't like short intervals? Use 30 day window.
+    timeOffset :
+</site>
+
+<site>
+    SiteName   : USAA
+    AcctType   : BASTMT     #bank
+    fiorg      : USAA
+    fid        : 24591
+    url        : https://service2.usaa.com/ofx/OFXServlet
+    bankid     : 314074269
+    brokerid   :
+    appid      : QWIN
+    appver     : 1700
+    mininterval:
+    timeOffset :
+</site>
+
+
+#--------------------------------------------------------------------------------
+# Stock quote options
+#--------------------------------------------------------------------------------
+
+EnableYahooFinance: Yes       # Enable quote lookup on Yahoo Finance
+#YahooURL: http://ca.finance.yahoo.com  # Alternate site for quotes. Default = finance.yahoo.com
+#QuoteCurrency: USD           # Currency for quotes.  Default = USD
+EnableYahooScrape: Yes        # Try a screen scrape if the primary Yahoo interface fails
+EnableGoogleFinance: Yes      # Enable quote lookup on Google Finance
+YahooTimeZone: -5:EST         # Timezone rule for the Yahoo quote server (default = -5:EST).
+ShowQuoteHTM: No              # Always show quotes.htm from Getdata
+AskQuoteHTM: Yes              # Ask to show quotes.htm from Getdata (overrides ShowQuoteHTM)
+ForceQuotes: No               # Force Money to record a transaction when importing quotes*
+#QuoteAccount: 0123456789USD  # Custom account number for Quotes.  Default = 0123456789
+                              # Account number can contain alpha-numeric (e.g., 123456789USD is valid)
+                              
+# * Only non-US versions of Money should use ForceQuotes.  Enabling this option forces a reconcile
+#   transaction in Money, which forces Money to record a price.  It requires accepting an additional 
+#   statement during every import, regardless of the CombineOFX setting.  Also, Money must be open
+#   before running Getdata if ForceQuotes is enabled.
+
+#--------------------------------------------------------------------------------
+# STOCK & FUND ticker symbol quote list, one per line (examples included).
+# See finance.yahoo.com for correct symbols.
+# Open-end fund symbols go into the <funds> list, and closed-end
+# funds go into the <stocks> section.  Most funds are "open end".
+#
+# Options:  m:value : define a currency multipler for the quote (examples: m:100, m:0.01)
+#           s:value : user defined symbol to send to Money (rather than Yahoo ticker symbol)
+#--------------------------------------------------------------------------------
+
+<stocks> 
+    #--- indexes ---
+    INDEXDJX:.DJI s:.DJI    #Dow Jones (Google Finance)
+    ^GSPC                   #S&P 500
+    ^IXIC                   #NASDAQ Composite
+    BP.L  m:0.01 s:BP       # BP @ London stock exchange (quote = pennies)
+                            # m:0.01 = multiply quote by 0.01 (convert from pennies to pounds *example*).
+                            # s:BP  = Send symbol BP to Money, rather than BP.L
+    #--- stocks ---
+    GOOG                    #Google
+    YHOO                    #Yahoo!
+    
+    #--- Currencies ---
+    EURUSD=X                #Euro to US Dollar
+    USDJPY=X                #USD to Japanese Yen
+</stocks>
+
+<funds>
+    MBFIX	                #Wells fargo total return bond I
+    AGTHX                   #Growth fund of america
+    MUTF_CA:RBF460          #quote from Toronto exchange (Google Finace)
+</funds>
+
+
