@@ -52,3 +52,8 @@ coverage.xml
 # Sphinx documentation
 docs/_build/
 
+# ynab-qfx
+*.ofx
+ofx_config.cfg
+sites.bak
+sites.dat
