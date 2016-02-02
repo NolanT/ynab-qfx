@@ -42,7 +42,7 @@
 # 15Mar2013*rlc
 #   - Added sanity check for <SEVERITY>ERROR code in server reply
 
-import time, os, sys, httplib, urllib2, glob, random
+import time, os, sys, httplib, urllib2, glob, random, ssl
 import getpass, scrubber, site_cfg
 from rlib1 import *
 from control2 import *
@@ -196,7 +196,7 @@ class OFXClient:
         response=False
         try:
             errmsg= "** An ERROR occurred attempting HTTPS connection to"
-            h = httplib.HTTPSConnection(host, timeout=5)
+            h = httplib.HTTPSConnection(host, timeout=5, context=ssl._create_unverified_context())
 
             errmsg= "** An ERROR occurred sending POST request to"
             p = h.request('POST', selector, query, 
