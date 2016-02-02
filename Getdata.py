@@ -52,7 +52,9 @@ if __name__=="__main__":
     print AboutTitle + ", Ver: " + AboutVersion + "\n"
     
     if Debug: print "***Running in DEBUG mode.  See Control2.py to disable***\n"
-    doit = raw_input("Download transactions? (Y/N/I=Interactive) [Y] ").upper()
+    #always doit
+    doit = 'Y'
+    #doit = raw_input("Download transactions? (Y/N/I=Interactive) [Y] ").upper()
     if len(doit) > 1: doit = doit[:1]    #keep first letter
     if doit == '': doit = 'Y'
     if doit in "YI":
@@ -82,7 +84,10 @@ if __name__=="__main__":
         #delete old data files
         ofxfiles = xfrdir+'*.ofx'
         if glob.glob(ofxfiles) <> []:
-            os.system("del "+ofxfiles)
+            if "posix"==os.name:
+                os.system("rm -rf "+ofxfiles)
+            else:
+                os.system("del "+ofxfiles)
             
         print "Download interval= {0} days".format(interval)
         
