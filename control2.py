@@ -21,7 +21,7 @@ AboutVersion  = '25-Feb-2014'
 AboutSource   = 'http://sites.google.com/site/pocketsense'
 AboutName     = 'Robert'
 
-xfrdir   = '.\\xfr\\'        #temp directory for statement downloads
+xfrdir   = './xfr/'        #temp directory for statement downloads
 cfgFile  = 'ofx_config.cfg'  #user account settings (can be encrypted)
 
 DefaultAppID  = 'QWIN'

@@ -218,7 +218,7 @@ def float2(str):
     
 def runFile(filename):
     #ecapsulate call to os.system in quotes
-    os.system('"'+filename+'"')
+    os.system('open "'+filename+'"')
     return
     
 def copy_txt_file(infile, outfile):
