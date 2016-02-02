@@ -65,6 +65,8 @@
 #   -Fixed bug that popped up when EnableYahooFinace=No
 # 25Feb2014*rlc:
 #   -Changed try/catch for URLopen to catch *any* exception
+# 14Sep2015*rlc
+#   -Changed yahoo time parse to read hours in 24hr format
 
 import os, sys, time, urllib2, socket, shlex, re, csv, uuid
 import site_cfg
@@ -154,7 +156,7 @@ class Security:
             if len(self.name.replace(" ", ""))==0: self.name = self.ticker
             self.price = str(float2(self.price)*self.multiplier)  #adjust price by multiplier
             self.date = self.date.lstrip('0 ')
-            self.datetime  = datetime.strptime(self.date + " " + self.time, "%m/%d/%Y %I:%M%p")
+            self.datetime  = datetime.strptime(self.date + " " + self.time, "%m/%d/%Y %H:%M%p")
             self.quoteTime = self.datetime.strftime("%Y%m%d%H%M%S") + '[' + YahooTimeZone + ']'
             if '?' not in self.pclose and 'N/A' not in self.pclose:
                 #adjust last close price by multiplier
