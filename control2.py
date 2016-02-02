@@ -5,6 +5,9 @@
 #
 # 27-Jul-2013: rlc
 #   - Added locale support 
+#
+# 03-Sep-2014: rlc
+#   - xfrdir is now platform independent
 #------------------------------------------------------------------------------------
 
 #---MODULES---
@@ -17,12 +20,14 @@ Debug = False             #debug mode = true only when testing
 #Debug = True
 
 AboutTitle    = 'PocketSense OFX Download Python Scripts'
-AboutVersion  = '25-Feb-2014'
+AboutVersion  = '14-Sep-2015'
 AboutSource   = 'http://sites.google.com/site/pocketsense'
 AboutName     = 'Robert'
 
-xfrdir   = './xfr/'        #temp directory for statement downloads
-cfgFile  = 'ofx_config.cfg'  #user account settings (can be encrypted)
+#xfrdir = temp directory for statement downloads.  Platform independent
+xfrdir   = os.path.join(os.path.curdir,"xfr") + os.sep
+if Debug: print "XFRDIR = " + xfrdir
+cfgFile  = 'ofx_config.cfg'    #user account settings (can be encrypted)
 
 DefaultAppID  = 'QWIN'
 DefaultAppVer = '2200'

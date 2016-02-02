@@ -12,8 +12,11 @@
 # 19Jan2014*rlc:  
 #   -Added support for Google Finance quotes
 
+# 02Feb2016*nt
+#   -Add support for opening ofx on Mac
 
-import os, glob, site_cfg, time, uuid, re, random
+
+import os, glob, site_cfg, time, uuid, re, random, platform
 from control2 import *
 from datetime import datetime
 
@@ -218,7 +221,11 @@ def float2(str):
     
 def runFile(filename):
     #ecapsulate call to os.system in quotes
-    os.system('open "'+filename+'"')
+    #need to use open command on mac
+    if "Darwin" == platform.system():
+        os.system('open "'+filename+'"')
+    else:
+        os.system('"'+filename+'"')
     return
     
 def copy_txt_file(infile, outfile):

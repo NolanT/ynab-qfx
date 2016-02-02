@@ -82,11 +82,13 @@ def scrub(filename, site):
 #                amt    = dollar amount of the transaction, including a hypen for negative entries (e.g., -24.95)
 #                #####  = 5 digit serial number
 
-#   2.  The 5-digit serial number can change each time you connect to the server, meaning that the same transaction can
-#       download with different FITID numbers.  That's not good, since Money requires a unique FITID value
-#       for each valid transaction.  Varying serial numbers result in duplicate transactions!
+#   2.  The 5-digit serial number can change each time you connect to the server, 
+#       meaning that the same transaction can download with different FITID numbers.  
+#       That's not good, since Money requires a unique FITID value for each valid transaction.  
+#       Varying serial numbers result in duplicate transactions!
 
-#   3.  We'll replace the 5-digit serial number with one of our own.  The default will be 0 for every transaction,
+#   3.  We'll replace the 5-digit serial number with one of our own.  
+#       The default will be 0 for every transaction,
 #       and we'll increment by one for each subsequent transaction that that matches
 #       a previous transaction in the file.
 

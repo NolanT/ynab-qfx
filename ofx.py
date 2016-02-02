@@ -42,7 +42,13 @@
 # 15Mar2013*rlc
 #   - Added sanity check for <SEVERITY>ERROR code in server reply
 
-import time, os, sys, httplib, urllib2, glob, random, ssl
+# 11Feb2015*rlc
+#   - Added support for mapping bank accounts to multiple Money accounts
+#     Account "versions" are defined by adding a ":xx" suffix in Setup.py.  
+#     The appended "version" is stripped from the account# before passing 
+#     to the bank, but is used when sending the results to Money.  
+
+import time, os, sys, httplib, urllib2, glob, random
 import getpass, scrubber, site_cfg
 from rlib1 import *
 from control2 import *
@@ -196,7 +202,7 @@ class OFXClient:
         response=False
         try:
             errmsg= "** An ERROR occurred attempting HTTPS connection to"
-            h = httplib.HTTPSConnection(host, timeout=5, context=ssl._create_unverified_context())
+            h = httplib.HTTPSConnection(host, timeout=5)
 
             errmsg= "** An ERROR occurred sending POST request to"
             p = h.request('POST', selector, query, 
@@ -226,12 +232,13 @@ class OFXClient:
 
 def getOFX(account, interval):
 
-    sitename  = account[0]
-    acct_num  = account[1]
-    acct_type = account[2]
-    user      = account[3]
-    password  = account[4]
-
+    sitename   = account[0]
+    _acct_num  = account[1]             #account value defined in sites.dat
+    acct_type  = account[2]
+    user       = account[3]
+    password   = account[4]
+    acct_num = _acct_num.split(':')[0]  #bank account# (stripped of :xxx version)
+    
     #get site and other user-defined data
     site = userdat.sites[sitename]
     
@@ -305,8 +312,16 @@ def getOFX(account, interval):
             f = open(ofxFileName,'r')
             content = f.read().upper()
             f.close
+
+            if acct_num <> _acct_num:
+                #replace bank account number w/ value defined in sites.dat
+                content = content.replace('<ACCTID>'+acct_num, '<ACCTID>'+ _acct_num)
+                f = open(ofxFileName,'w')
+                f.write(content)
+                f.close()
+                
             content = ''.join(a for a in content if a not in '\r\n ')  #strip newlines & spaces
-            
+           
             if content.find('OFXHEADER:') < 0 and content.find('<OFX>') < 0 and content.find('</OFX>') < 0:
                 #throw exception and exit
                 raise Exception("Invalid OFX statement.")
